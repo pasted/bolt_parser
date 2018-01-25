@@ -7,7 +7,7 @@ import argparse, csv, string
 class BoltLmm(object):
    def __init__(self, row):
       self.snp = row['SNP']
-      self.chromosme = row['CHR']
+      self.chromosome = row['CHR']
       self.coordinate = row['BP']
       self.genpos = row['GENPOS']
       self.allele0 = row['ALLELE0']
@@ -102,12 +102,12 @@ class Storage(object):
       self.bolt_store = []
       self.ps_store = []
 
-   def phenoscanner_to_bolt(self):
+   def phenoscanner_to_bolt(self, bolt_record):
       """
       Links Phenoscanner results to the relevant Bolt-LMM object
       """
-      
-      
+      filtered_list = [ps for ps in self.ps_store if ((ps.chromosome == bolt_record.chromosome) and (ps.coordinate == bolt_record.coordinate))]
+      print(filtered_list)
 
 class Main(object):
    '''Main class'''
@@ -128,6 +128,7 @@ class Main(object):
       storage = ps_reader.read_ps(args.ps_path, storage)
       print(len(storage.bolt_store))
       print(len(storage.ps_store))
+      storage.phenoscanner_to_bolt(storage.bolt_store[-1])
 
 if __name__ == '__main__':
    Main()
